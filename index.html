@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateur Fitness — Calories &amp; Macros</title>
+<meta name="description" content="Calcule tes calories de maintenance, protéines, lipides, glucides, fibres et besoins en eau à partir de ton poids.">
+<style>
+  :root {
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --border: #e2e2e6;
+    --text: #1b1b1f;
+    --text-muted: #6b6b74;
+    --accent: #2f6fed;
+    --accent-soft: #e8effe;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121214;
+      --surface: #1b1b1f;
+      --border: #2c2c32;
+      --text: #f0f0f2;
+      --text-muted: #9a9aa2;
+      --accent: #6d97f5;
+      --accent-soft: #1e2942;
+      --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121214;
+    --surface: #1b1b1f;
+    --border: #2c2c32;
+    --text: #f0f0f2;
+    --text-muted: #9a9aa2;
+    --accent: #6d97f5;
+    --accent-soft: #1e2942;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  }
+  :root[data-theme="light"] {
+    --bg: #f7f7f8;
+    --surface: #ffffff;
+    --border: #e2e2e6;
+    --text: #1b1b1f;
+    --text-muted: #6b6b74;
+    --accent: #2f6fed;
+    --accent-soft: #e8effe;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+  header { margin-bottom: 2rem; }
+  h1 {
+    font-size: 1.6rem;
+    margin: 0 0 0.4rem;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+  }
+  .card h2 {
+    font-size: 1.05rem;
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+  }
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  label {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  input[type="number"] {
+    width: 8rem;
+    font-size: 1.1rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+  }
+  input[type="number"]:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .unit { color: var(--text-muted); font-size: 0.9rem; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.55rem 0.4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  td.value {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    text-align: right;
+  }
+  tr:last-child td { border-bottom: none; }
+  .result-highlight td.value { color: var(--accent); }
+
+  .label-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .info-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    font-style: italic;
+    font-family: Georgia, "Times New Roman", serif;
+    cursor: pointer;
+    flex: none;
+    padding: 0;
+    line-height: 1;
+  }
+  .info-btn:hover,
+  .info-btn:focus-visible,
+  .info-btn.open {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .info-popover {
+    position: absolute;
+    top: 140%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    min-width: 12rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 0.5rem 0.65rem;
+    font-size: 0.78rem;
+    font-weight: 400;
+    font-style: normal;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    text-align: left;
+    line-height: 1.4;
+    white-space: normal;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    z-index: 10;
+  }
+  .info-btn:hover .info-popover,
+  .info-btn:focus-visible .info-popover,
+  .info-btn.open .info-popover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+  .info-popover code {
+    color: var(--accent);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  footer {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🧮 Calculateur Fitness — Calories &amp; Macros</h1>
+    <p class="subtitle">Calories de maintenance, protéines, lipides, glucides, fibres et eau, calculés à partir de ton poids.</p>
+  </header>
+
+  <section class="card">
+    <h2>Exemple de référence <span class="badge">100 kg</span></h2>
+    <table id="reference-table"></table>
+  </section>
+
+  <section class="card">
+    <h2>Ton calcul personnalisé</h2>
+    <div class="input-row">
+      <label for="weight-input">Ton poids</label>
+      <input type="number" id="weight-input" value="100" min="1" max="400" step="0.1">
+      <span class="unit">kg</span>
+    </div>
+    <table id="personal-table"></table>
+  </section>
+
+  <footer>
+    Formules simplifiées à visée pédagogique — ne remplacent pas l'avis d'un professionnel de santé ou d'un coach.
+  </footer>
+</div>
+
+<script>
+  function computeMacros(weightKg) {
+    const kcal = weightKg * 26;
+    const proteinG = weightKg * 2;
+    const proteinKcal = proteinG * 4;
+    const fatG = kcal / 30;
+    const fatKcal = fatG * 9;
+    const fiberG = kcal * 0.014;
+    const carbsG = (kcal - proteinKcal - fatKcal) / 4;
+    const waterL = weightKg / 30;
+    return { kcal, proteinG, fatG, fiberG, carbsG, waterL };
+  }
+
+  function renderTable(el, weightKg) {
+    const r = computeMacros(weightKg);
+    const rows = [
+      { label: "Calories de maintenance", formula: "poids (kg) × 26", value: `${Math.round(r.kcal)} kcal` },
+      { label: "Protéines", formula: "poids (kg) × 2", value: `${Math.round(r.proteinG)} g` },
+      { label: "Lipides", formula: "calories totales ÷ 30", value: `${Math.round(r.fatG)} g` },
+      { label: "Fibres", formula: "calories totales × 0,014", value: `${Math.round(r.fiberG)} g` },
+      { label: "Glucides", formula: "(calories − kcal protéines − kcal lipides) ÷ 4", value: `${Math.round(r.carbsG)} g` },
+      { label: "Eau", formula: "poids (kg) ÷ 30", value: `${r.waterL.toFixed(1)} L` },
+    ];
+    el.innerHTML =
+      "<thead><tr><th>Élément</th><th style='text-align:right'>Résultat</th></tr></thead><tbody>" +
+      rows.map(row =>
+        `<tr class="result-highlight"><td><span class="label-cell">${row.label}` +
+        `<button type="button" class="info-btn" aria-label="Comment ${row.label.toLowerCase()} est calculé">i` +
+        `<span class="info-popover" role="tooltip">${row.label} = <code>${row.formula}</code></span>` +
+        `</button></span></td><td class="value">${row.value}</td></tr>`
+      ).join("") +
+      "</tbody>";
+  }
+
+  renderTable(document.getElementById("reference-table"), 100);
+
+  const weightInput = document.getElementById("weight-input");
+  const personalTable = document.getElementById("personal-table");
+
+  function updatePersonal() {
+    const w = parseFloat(weightInput.value);
+    if (!isNaN(w) && w > 0) {
+      renderTable(personalTable, w);
+    }
+  }
+
+  weightInput.addEventListener("input", updatePersonal);
+  updatePersonal();
+
+  // Info popovers: click/tap toggles (hover already works via CSS),
+  // and clicking elsewhere closes any open popover.
+  document.addEventListener("click", (event) => {
+    const clickedBtn = event.target.closest(".info-btn");
+    document.querySelectorAll(".info-btn.open").forEach((btn) => {
+      if (btn !== clickedBtn) btn.classList.remove("open");
+    });
+    if (clickedBtn) {
+      clickedBtn.classList.toggle("open");
+    }
+  });
+</script>
+</body>
+</html>
