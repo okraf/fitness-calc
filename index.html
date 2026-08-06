@@ -254,19 +254,21 @@
     const kcal = weightKg * 26;
     const proteinG = weightKg * 2;
     const proteinKcal = proteinG * 4;
+    const proteinMaintainG = weightKg * 0.6;
     const fatG = kcal / 30;
     const fatKcal = fatG * 9;
     const fiberG = kcal * 0.014;
     const carbsG = (kcal - proteinKcal - fatKcal) / 4;
     const waterL = weightKg / 30;
-    return { kcal, proteinG, fatG, fiberG, carbsG, waterL };
+    return { kcal, proteinG, proteinMaintainG, fatG, fiberG, carbsG, waterL };
   }
 
   function renderTable(el, weightKg) {
     const r = computeMacros(weightKg);
     const rows = [
       { label: "Calories de maintenance", formula: "poids (kg) × 26", value: `${Math.round(r.kcal)} kcal` },
-      { label: "Protéines", formula: "poids (kg) × 2", value: `${Math.round(r.proteinG)} g` },
+      { label: "Protéines (prise de masse)", formula: "poids (kg) × 2", value: `${Math.round(r.proteinG)} g` },
+      { label: "Protéines (maintien musculaire)", formula: "poids (kg) × 0,6", value: `${Math.round(r.proteinMaintainG)} g` },
       { label: "Lipides", formula: "calories totales ÷ 30", value: `${Math.round(r.fatG)} g` },
       { label: "Fibres", formula: "calories totales × 0,014", value: `${Math.round(r.fiberG)} g` },
       { label: "Glucides", formula: "(calories − kcal protéines − kcal lipides) ÷ 4", value: `${Math.round(r.carbsG)} g` },
