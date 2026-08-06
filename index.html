@@ -3,57 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculateur Fitness — Calories &amp; Macros</title>
+<title>Calculateur Fitness · Perceval</title>
 <meta name="description" content="Calcule tes calories de maintenance, protéines, lipides, glucides, fibres et besoins en eau à partir de ton poids.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f7f7f8;
+    --bg: #faf9f4;
     --surface: #ffffff;
-    --border: #e2e2e6;
-    --text: #1b1b1f;
-    --text-muted: #6b6b74;
-    --accent: #2f6fed;
-    --accent-soft: #e8effe;
-    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --border: #e8e4d8;
+    --text: #4e4427;
+    --text-muted: #8a7f63;
+    --accent: #be9f13;
+    --accent-soft: #f5edd1;
+    --shadow: 0 1px 3px rgba(78,68,39,0.08), 0 1px 2px rgba(78,68,39,0.05);
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #121214;
-      --surface: #1b1b1f;
-      --border: #2c2c32;
-      --text: #f0f0f2;
-      --text-muted: #9a9aa2;
-      --accent: #6d97f5;
-      --accent-soft: #1e2942;
+      --bg: #241f14;
+      --surface: #322b1c;
+      --border: #443b27;
+      --text: #f5f2e7;
+      --text-muted: #b8ae92;
+      --accent: #d4b942;
+      --accent-soft: #3a3320;
       --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
     }
   }
   :root[data-theme="dark"] {
-    --bg: #121214;
-    --surface: #1b1b1f;
-    --border: #2c2c32;
-    --text: #f0f0f2;
-    --text-muted: #9a9aa2;
-    --accent: #6d97f5;
-    --accent-soft: #1e2942;
+    --bg: #241f14;
+    --surface: #322b1c;
+    --border: #443b27;
+    --text: #f5f2e7;
+    --text-muted: #b8ae92;
+    --accent: #d4b942;
+    --accent-soft: #3a3320;
     --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
   }
   :root[data-theme="light"] {
-    --bg: #f7f7f8;
+    --bg: #faf9f4;
     --surface: #ffffff;
-    --border: #e2e2e6;
-    --text: #1b1b1f;
-    --text-muted: #6b6b74;
-    --accent: #2f6fed;
-    --accent-soft: #e8effe;
-    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --border: #e8e4d8;
+    --text: #4e4427;
+    --text-muted: #8a7f63;
+    --accent: #be9f13;
+    --accent-soft: #f5edd1;
+    --shadow: 0 1px 3px rgba(78,68,39,0.08), 0 1px 2px rgba(78,68,39,0.05);
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: "League Spartan", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     line-height: 1.5;
   }
   .wrap {
@@ -191,7 +194,7 @@
     font-size: 0.78rem;
     font-weight: 400;
     font-style: normal;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: "League Spartan", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     text-align: left;
     line-height: 1.4;
     white-space: normal;
@@ -219,13 +222,30 @@
     margin-top: 2rem;
     text-align: center;
   }
-  footer a { color: inherit; }
+  footer .disclaimer { margin: 0 0 1rem; }
+  footer .meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  footer a {
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-decoration: none;
+  }
+  footer a:hover { color: var(--accent); }
+  footer a svg { width: 1rem; height: 1rem; fill: currentColor; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1>🧮 Calculateur Fitness — Calories &amp; Macros</h1>
+    <h1>Calculateur Fitness</h1>
     <p class="subtitle">Calories de maintenance, protéines, lipides, glucides, fibres et eau, calculés à partir de ton poids.</p>
   </header>
 
@@ -245,7 +265,14 @@
   </section>
 
   <footer>
-    Formules simplifiées à visée pédagogique — ne remplacent pas l'avis d'un professionnel de santé ou d'un coach.
+    <p class="disclaimer">Formules simplifiées à visée pédagogique. Elles ne remplacent pas l'avis d'un professionnel de santé ou d'un coach.</p>
+    <div class="meta">
+      <span>© 2026 Perceval</span>
+      <a href="https://github.com/okraf/fitness-calc" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        <span>github.com/okraf/fitness-calc</span>
+      </a>
+    </div>
   </footer>
 </div>
 
