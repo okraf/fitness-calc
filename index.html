@@ -242,7 +242,7 @@
 <div class="wrap">
   <header>
     <h1>Calculateur Fitness</h1>
-    <p class="subtitle">Calories de maintenance, protéines, lipides, glucides, fibres et eau, calculés à partir de ton poids.</p>
+    <p class="subtitle">Calories de maintenance, protéines, lipides, glucides, fibres et eau à consommer chaque jour, calculés à partir de ton poids.</p>
   </header>
 
   <section class="card">
@@ -304,7 +304,7 @@
       { label: "Eau", formula: "poids (kg) ÷ 30", value: `${r.waterL.toFixed(1)} L` },
     ];
     el.innerHTML =
-      "<thead><tr><th>Élément</th><th style='text-align:right'>Résultat</th></tr></thead><tbody>" +
+      "<thead><tr><th>Élément</th><th style='text-align:right'>Par jour</th></tr></thead><tbody>" +
       rows.map(row =>
         `<tr class="result-highlight"><td><span class="label-cell">${row.label}` +
         `<button type="button" class="info-btn" aria-label="Comment ${row.label.toLowerCase()} est calculé">i` +
