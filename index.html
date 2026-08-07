@@ -175,6 +175,43 @@
     color: var(--accent);
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
+  .sources {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+  .sources summary {
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sources summary::-webkit-details-marker { display: none; }
+  .sources summary::after {
+    content: "+";
+    color: var(--accent);
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .sources[open] summary::after { content: "−"; }
+  .sources ul {
+    margin: 0;
+    padding: 0 1.5rem 1.25rem;
+    list-style: none;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .sources li { padding: 0.15rem 0; }
+  .sources a { color: var(--accent); text-decoration: none; }
+  .sources a:hover { text-decoration: underline; }
   footer {
     color: var(--text-muted);
     font-size: 0.8rem;
@@ -218,6 +255,17 @@
     <table id="personal-table"></table>
   </section>
 
+  <details class="sources">
+    <summary>En savoir plus sur ces formules</summary>
+    <ul>
+      <li>Calories : règle rapide poids × 26-28 kcal/kg — <a href="https://www.bodyspec.com/blog/post/tdee_calculator_how_to_find_your_maintenance_calories" target="_blank" rel="noopener">BodySpec</a>, <a href="https://www.maintenancecaloriecalculator.com/" target="_blank" rel="noopener">Maintenance Calorie Calculator</a></li>
+      <li>Protéines : 1,4-2,0 g/kg (maintien et prise de masse) — <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5477153/" target="_blank" rel="noopener">ISSN Position Stand</a> ; 1,2-2,0 g/kg pour une personne active — <a href="https://www.trifectanutrition.com/blog/how-much-protein-do-i-need-to-build-muscle" target="_blank" rel="noopener">Academy of Nutrition and Dietetics / ACSM</a> ; guide général — <a href="https://examine.com/guides/protein-intake/" target="_blank" rel="noopener">Examine.com</a></li>
+      <li>Lipides : 20-35% des calories, plancher hormonal ~0,8-1 g/kg — <a href="https://cleanhealth.edu.au/blog/nutrition/fat-requirements-for-optimal-hormonal-health/" target="_blank" rel="noopener">Clean Health</a>, <a href="https://www.strongerbyscience.com/dietary-fat/" target="_blank" rel="noopener">Stronger by Science</a></li>
+      <li>Fibres : 14g / 1000 kcal — <a href="https://ific.org/resources/articles/fiber-fact-sheet/" target="_blank" rel="noopener">IFIC Fiber Fact Sheet</a>, <a href="https://www.cleaneatzkitchen.com/a/blog/how-much-fiber-per-day" target="_blank" rel="noopener">Clean Eatz Kitchen</a></li>
+      <li>Eau : 30-35 ml/kg — <a href="https://mammothmug.com/blogs/hydration/daily-water-intake-by-weight" target="_blank" rel="noopener">Mammoth Mug (repères NASEM)</a></li>
+    </ul>
+  </details>
+
   <footer>
     <p class="disclaimer">Formules simplifiées à visée pédagogique. Elles ne remplacent pas l'avis d'un professionnel de santé ou d'un coach.</p>
     <div class="meta">
@@ -235,7 +283,7 @@
     const kcal = weightKg * 26;
     const proteinG = weightKg * 2;
     const proteinKcal = proteinG * 4;
-    const proteinMaintainG = weightKg * 0.6;
+    const proteinMaintainG = weightKg * 1.2;
     const fatG = kcal / 30;
     const fatKcal = fatG * 9;
     const fiberG = kcal * 0.014;
@@ -249,7 +297,7 @@
     const rows = [
       { label: "Calories de maintenance", formula: "poids (kg) × 26", value: `${Math.round(r.kcal)} kcal` },
       { label: "Protéines (prise de masse)", formula: "poids (kg) × 2", value: `${Math.round(r.proteinG)} g` },
-      { label: "Protéines (maintien musculaire)", formula: "poids (kg) × 0,6", value: `${Math.round(r.proteinMaintainG)} g` },
+      { label: "Protéines (maintien musculaire)", formula: "poids (kg) × 1,2", value: `${Math.round(r.proteinMaintainG)} g` },
       { label: "Lipides", formula: "calories totales ÷ 30", value: `${Math.round(r.fatG)} g` },
       { label: "Fibres", formula: "calories totales × 0,014", value: `${Math.round(r.fiberG)} g` },
       { label: "Glucides", formula: "(calories − kcal protéines − kcal lipides) ÷ 4", value: `${Math.round(r.carbsG)} g` },
