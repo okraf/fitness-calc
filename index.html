@@ -5,157 +5,190 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculateur Fitness · Perceval</title>
 <meta name="description" content="Calcule tes calories de maintenance, protéines, lipides, glucides, fibres et besoins en eau à partir de ton poids.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#EFEEEC">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/jost-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-  /* Palette officielle Perceval (github.com/perceval-sh/theme-asciidoc) */
+  /* Charte Perceval (G · Plan) : papier, encre, pourpre et or en accent, Jost et DM Mono auto-hébergées */
+  @font-face { font-family: "Jost"; font-style: normal; font-weight: 100 900; font-display: swap; src: url(assets/fonts/jost-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: "Jost"; font-style: normal; font-weight: 100 900; font-display: swap; src: url(assets/fonts/jost-latin-ext.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+  @font-face { font-family: "DM Mono"; font-style: normal; font-weight: 300; font-display: swap; src: url(assets/fonts/dm-mono-300-latin.woff2) format("woff2"); }
+  @font-face { font-family: "DM Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url(assets/fonts/dm-mono-400-latin.woff2) format("woff2"); }
   :root {
-    --bg: #faf9f4;
-    --surface: #ffffff;
-    --border: #ece7d8;
-    --text: #4e4427;
-    --text-muted: #948a6d;
-    --accent: #be9e12;
-    --accent-soft: #f6f5f4;
-    --shadow: 0 1px 3px rgba(78,68,39,0.07), 0 1px 2px rgba(78,68,39,0.04);
+    --papier: #EFEEEC;
+    --blanc: #F8F8F6;
+    --encre: #121014;
+    --pourpre-nuit: #2A1834;
+    --pourpre: #A2457F;
+    --or: #E2BD3C;
+    --gris: #9A9A9A;
+    --texte-doux: var(--encre);
+    --ligne: color-mix(in srgb, var(--encre) 22%, transparent);
+    --ligne-douce: color-mix(in srgb, var(--encre) 12%, transparent);
+    --f-texte: "Jost", "Helvetica Neue", Arial, sans-serif;
+    --f-mono: "DM Mono", Menlo, Consolas, monospace;
+    --croix-or: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M7.5 2h5v5.5H18v5h-5.5V18h-5v-5.5H2v-5h5.5z' fill='%23E2BD3C'/%3E%3C/svg%3E");
+    --repere: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 11'%3E%3Cpath d='M5.5 0v11M0 5.5h11' stroke='%23121014' stroke-opacity='.55'/%3E%3C/svg%3E");
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "League Spartan", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    line-height: 1.5;
+    background: var(--papier);
+    color: var(--encre);
+    font-family: var(--f-texte);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
   }
+  @media (min-width: 1024px) { body { font-size: 17px; } }
+  a { color: var(--pourpre); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:hover { color: var(--encre); }
+  :focus-visible { outline: 1px solid var(--pourpre); outline-offset: 3px; border-radius: 2px; }
   .wrap {
     max-width: 760px;
     margin: 0 auto;
-    padding: 2.5rem 1.25rem 4rem;
+    padding: 56px 16px 48px;
   }
-  header { margin-bottom: 2rem; }
+  @media (min-width: 768px) { .wrap { padding: 88px 32px 56px; } }
+  header { margin-bottom: 48px; }
   h1 {
-    font-size: 1.6rem;
-    margin: 0 0 0.4rem;
-  }
-  .subtitle {
-    color: var(--text-muted);
-    font-size: 0.95rem;
+    font-size: clamp(36px, 8vw, 56px);
+    font-weight: 500;
+    line-height: 1.06;
+    letter-spacing: -0.025em;
     margin: 0;
   }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    margin-bottom: 1.5rem;
+  h1::after {
+    content: "";
+    display: block;
+    width: 72px;
+    height: 1px;
+    background: var(--or);
+    margin-top: 24px;
   }
+  .subtitle {
+    color: var(--texte-doux);
+    font-size: 18px;
+    max-width: 600px;
+    margin: 20px 0 0;
+  }
+  /* Carte : blanc cassé, filet 1 px, angles vifs, croix de repérage aux quatre coins */
+  .card {
+    position: relative;
+    background: var(--blanc);
+    border: 1px solid var(--ligne);
+    border-radius: 2px;
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    pointer-events: none;
+    background: var(--repere) left top / 11px no-repeat, var(--repere) right top / 11px no-repeat, var(--repere) left bottom / 11px no-repeat, var(--repere) right bottom / 11px no-repeat;
+  }
+  @media (min-width: 768px) { .card { padding: 32px; } }
   .card h2 {
-    font-size: 1.05rem;
-    margin: 0 0 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    font-size: 22.7px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 0 0 20px;
   }
   .input-row {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 12px;
     flex-wrap: wrap;
   }
   label {
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 500;
+    font-size: 15px;
   }
   input[type="number"] {
     width: 8rem;
-    font-size: 1.1rem;
-    padding: 0.5rem 0.7rem;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
+    min-height: 48px;
+    font-family: var(--f-mono);
+    font-weight: 400;
+    font-size: 20px;
+    padding: 8px 12px;
+    border-radius: 2px;
+    border: 1px solid var(--ligne);
+    background: var(--papier);
+    color: var(--encre);
   }
-  input[type="number"]:focus {
-    outline: 2px solid var(--accent);
-    outline-offset: 1px;
-  }
-  .unit { color: var(--text-muted); font-size: 0.9rem; }
+  input[type="number"]:focus { outline: 1px solid var(--pourpre); outline-offset: 2px; border-color: var(--pourpre); }
+  .unit { font-family: var(--f-mono); font-weight: 300; font-size: 15px; }
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 1rem;
-    font-size: 0.95rem;
+    margin-top: 24px;
   }
   th, td {
     text-align: left;
-    padding: 0.55rem 0.4rem;
-    border-bottom: 1px solid var(--border);
+    padding: 12px 4px;
+    border-bottom: 1px solid var(--ligne-douce);
   }
   th {
-    color: var(--text-muted);
-    font-weight: 600;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    font-weight: 500;
+    font-size: 14px;
+    border-bottom-color: var(--ligne);
   }
   td.value {
-    font-variant-numeric: tabular-nums;
-    font-weight: 700;
+    font-family: var(--f-mono);
+    font-weight: 400;
+    font-size: 16px;
     text-align: right;
+    white-space: nowrap;
   }
   tr:last-child td { border-bottom: none; }
-  .result-highlight td.value { color: var(--accent); }
-
-  .label-cell {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
+  .label-cell { display: inline; }
+  /* Bouton ⓘ : petite capsule carrée au trait (le cercle est réservé au sceau du logo) */
   .info-btn {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.1rem;
-    height: 1.1rem;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text-muted);
-    font-size: 0.68rem;
-    font-style: italic;
-    font-family: Georgia, "Times New Roman", serif;
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    border: 1px solid var(--ligne);
+    background: transparent;
+    color: var(--encre);
+    font-family: var(--f-mono);
+    font-size: 12px;
     cursor: pointer;
     flex: none;
     padding: 0;
+    margin-left: 8px;
+    vertical-align: 1px;
     line-height: 1;
   }
+  .info-btn::after { content: ""; position: absolute; inset: -12px; }
   .info-btn:hover,
   .info-btn:focus-visible,
   .info-btn.open {
-    color: var(--accent);
-    border-color: var(--accent);
+    color: var(--pourpre);
+    border-color: var(--pourpre);
   }
   .info-popover {
     position: absolute;
-    top: 140%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-4px);
-    min-width: 12rem;
-    background: var(--surface);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    padding: 0.5rem 0.65rem;
-    font-size: 0.78rem;
-    font-weight: 400;
-    font-style: normal;
-    font-family: "League Spartan", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    top: 150%;
+    left: -8px;
+    transform: translateY(-4px);
+    min-width: 13rem;
+    background: var(--blanc);
+    color: var(--encre);
+    border: 1px solid var(--encre);
+    border-radius: 2px;
+    padding: 8px 12px;
+    font-family: var(--f-texte);
+    font-size: 14px;
     text-align: left;
-    line-height: 1.4;
+    line-height: 1.45;
     white-space: normal;
     opacity: 0;
     visibility: hidden;
@@ -168,26 +201,21 @@
   .info-btn.open .info-popover {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
     pointer-events: auto;
   }
-  .info-popover code {
-    color: var(--accent);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  }
+  .info-popover code { font-family: var(--f-mono); font-weight: 300; }
   .sources {
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background: var(--surface);
-    box-shadow: var(--shadow);
-    margin-bottom: 1.5rem;
-    overflow: hidden;
+    border-top: 1px solid var(--ligne);
+    border-bottom: 1px solid var(--ligne);
+    margin-bottom: 32px;
   }
   .sources summary {
     cursor: pointer;
-    padding: 1rem 1.5rem;
-    font-weight: 600;
-    font-size: 0.95rem;
+    min-height: 56px;
+    padding: 12px 0;
+    font-weight: 500;
+    font-size: 17px;
     list-style: none;
     display: flex;
     align-items: center;
@@ -196,46 +224,62 @@
   .sources summary::-webkit-details-marker { display: none; }
   .sources summary::after {
     content: "+";
-    color: var(--accent);
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-family: var(--f-mono);
+    font-weight: 300;
+    font-size: 22px;
+    color: var(--pourpre);
   }
   .sources[open] summary::after { content: "−"; }
   .sources ul {
     margin: 0;
-    padding: 0 1.5rem 1.25rem;
+    padding: 0 0 20px;
     list-style: none;
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    line-height: 1.6;
+    font-size: 15px;
+    color: var(--texte-doux);
   }
-  .sources li { padding: 0.15rem 0; }
-  .sources a { color: var(--accent); text-decoration: none; }
-  .sources a:hover { text-decoration: underline; }
+  .sources li {
+    position: relative;
+    padding: 4px 0 4px 22px;
+  }
+  .sources li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.85em;
+    width: 9px;
+    height: 9px;
+    background: var(--croix-or) center / contain no-repeat;
+  }
   footer {
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    margin-top: 2rem;
-    text-align: center;
+    font-size: 14px;
+    margin-top: 48px;
   }
-  footer .disclaimer { margin: 0 0 1rem; }
+  footer .disclaimer { margin: 0 0 24px; color: var(--texte-doux); }
   footer .meta {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--ligne);
   }
-  footer a {
-    color: var(--text-muted);
+  footer .logo { display: flex; align-items: center; gap: 16px; color: var(--encre); text-decoration: none; }
+  footer .logo img { height: 24px; width: auto; display: block; }
+  footer .meta > a:not(.logo) {
+    color: var(--encre);
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 8px;
+    min-height: 44px;
     text-decoration: none;
+    font-family: var(--f-mono);
+    font-weight: 300;
+    font-size: 13px;
   }
-  footer a:hover { color: var(--accent); }
-  footer a svg { width: 1rem; height: 1rem; fill: currentColor; }
+  footer .meta > a:not(.logo):hover { color: var(--pourpre); }
+  footer a svg { width: 16px; height: 16px; fill: currentColor; }
+  @media (prefers-reduced-motion: reduce) { .info-popover { transition: none; } }
 </style>
 </head>
 <body>
@@ -269,7 +313,7 @@
   <footer>
     <p class="disclaimer">Formules simplifiées à visée pédagogique. Elles ne remplacent pas l'avis d'un professionnel de santé ou d'un coach.</p>
     <div class="meta">
-      <span>© 2026 Perceval</span>
+      <a class="logo" href="https://perceval.sh" target="_blank" rel="noopener"><img src="assets/perceval-logo-horizontal.svg" alt="Perceval" width="140" height="24"><span>© 2026</span></a>
       <a href="https://github.com/okraf/fitness-calc" target="_blank" rel="noopener">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
         <span>github.com/okraf/fitness-calc</span>
@@ -306,7 +350,7 @@
     el.innerHTML =
       "<thead><tr><th>Élément</th><th style='text-align:right'>Par jour</th></tr></thead><tbody>" +
       rows.map(row =>
-        `<tr class="result-highlight"><td><span class="label-cell">${row.label}` +
+        `<tr><td><span class="label-cell">${row.label}` +
         `<button type="button" class="info-btn" aria-label="Comment ${row.label.toLowerCase()} est calculé">i` +
         `<span class="info-popover" role="tooltip">${row.label} = <code>${row.formula}</code></span>` +
         `</button></span></td><td class="value">${row.value}</td></tr>`
